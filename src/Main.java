@@ -3,20 +3,21 @@ import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
+import java.util.Scanner;
 
 
 class StudentList{
     public void a(){
         System.out.println("Loading data ...");
         try {
-            BufferedReader s = new BufferedReader(
+            BufferedReader bufferReader = new BufferedReader(
                     new InputStreamReader(
                             new FileInputStream("students.txt")
                     )
             );
-            String r = s.readLine();
-            String i[] = r.split(", ");
-            for (String j : i) {
+            String names = bufferReader.readLine();
+            String studentNames[] = names.split(", ");
+            for (String j : studentNames) {
                 System.out.println(j);
             }
         } catch (Exception e) {
@@ -24,6 +25,8 @@ class StudentList{
         }
         System.out.println("Data Loaded.");
     }
+
+
     public void r(){
         System.out.println("Loading data ...");
         try {
@@ -78,7 +81,27 @@ class StudentList{
                     }
                 }
             }
-            System.out.println(count + " word(s) found " + a.length);
+            System.out.println(count + " word(s) found ");
+        } catch (Exception e) {
+        }
+        System.out.println("Data Loaded.");
+    }
+    public  void question(String args[]){
+        System.out.println("Loading data ...");
+        try {
+            BufferedReader s = new BufferedReader(
+                    new InputStreamReader(
+                            new FileInputStream("students.txt")));
+            String r = s.readLine();
+            String i[] = r.split(",");
+            boolean done = false;
+            String t = args[0].substring(1);
+            for (int idx = 0; idx < i.length && !done; idx++) {
+                if (i[idx].equals(t)) {
+                    System.out.println("We found it!");
+                    done = true;
+                }
+            }
         } catch (Exception e) {
         }
         System.out.println("Data Loaded.");
@@ -90,36 +113,37 @@ public class Main {
 
     public static void main(String[] args) {
         StudentList studentList = new StudentList();
+        boolean isRunning = true;
 
-//		Check arguments
-        if (args[0].equals("a")) {
-           studentList.a();
-        } else if (args[0].equals("r")) {
-           studentList.r();
-        } else if (args[0].contains("+")) {
-            studentList.plus(args);
-        } else if (args[0].contains("?")) {
-            System.out.println("Loading data ...");
-            try {
-                BufferedReader s = new BufferedReader(
-                        new InputStreamReader(
-                                new FileInputStream("students.txt")));
-                String r = s.readLine();
-                String i[] = r.split(",");
-                boolean done = false;
-                String t = args[0].substring(1);
-                for (int idx = 0; idx < i.length && !done; idx++) {
-                    if (i[idx].equals(t)) {
-                        System.out.println("We found it!");
-                        done = true;
-                    }
-                }
-            } catch (Exception e) {
+        while (isRunning == true){
+            //		Check arguments
+            if(args[0].equals("e")){
+                isRunning = false;
             }
-            System.out.println("Data Loaded.");
-        } else if (args[0].contains("c")) {
-            studentList.c();
+            else if (args[0].equals("a")) {
+                studentList.a();
+            } else if (args[0].equals("r")) {
+                studentList.r();
+            } else if (args[0].contains("+")) {
+                studentList.plus(args);
+            } else if (args[0].contains("?")) {
+                studentList.question(args);
+            } else if (args[0].contains("c")) {
+                studentList.c();
+            }
+
+            System.out.println(
+                            "to see all the students list press a then enter\n"
+                            + "to see a random student press r then enter\n"
+                            +"to exit press e then enter\n"
+            );
+
+            Scanner scanner = new Scanner(System.in);
+            args[0] = scanner.nextLine();
+
         }
+
+
     }
 
 }
