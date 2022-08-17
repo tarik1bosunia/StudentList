@@ -1,10 +1,7 @@
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.Random;
-import java.util.Scanner;
+import java.util.*;
 
 
 class StudentList {
@@ -22,16 +19,15 @@ class StudentList {
         }
     }
 
-    private String[] getNames() throws IOException {
-        String names = bufferReader.readLine();
-        String studentNames[] = names.split(", ");
-        return studentNames;
+    private String[] getStudentNames() throws IOException {
+
+        return bufferReader.readLine().split(", ");
     }
 
-    public void a() {
+    public void showStudentsName() {
 
         try {
-            String[] studentNames = getNames();
+            String[] studentNames = getStudentNames();
             for (String studentName : studentNames) {
                 System.out.println(studentName);
             }
@@ -40,32 +36,38 @@ class StudentList {
         }
     }
 
-    public void r() {
+    public void showARandomStudent() {
         try {
-            String[] studentNames = getNames();
+            String[] studentNames = getStudentNames();
 
             // generating random int [0,length)
-            int length = studentNames.length;
             Random random = new Random();
-            int randomNumber = random.nextInt(length);
+            int randomNumber = random.nextInt(studentNames.length);
 
             System.out.println(studentNames[randomNumber]);
         } catch (Exception e) {
         }
     }
 
-    public void plus(String args[]) {
-        System.out.println(Constant.LoadingMessage);
+    public void addAStudentNameInStudentList(String args[]) {
 
         try {
-            BufferedWriter bufferedWriter = new BufferedWriter(
-                    new FileWriter(Constant.StudentList, true));
-            String t = args[0].substring(1);
+            Formatter formatter = new Formatter(new FileWriter(Constant.StudentList, true));
+
+            String studentName = "";
+            for (String arg: args) {
+                if(arg != args[0]){
+                    studentName = studentName + " " + arg;
+                }
+            }
+            studentName = studentName.trim();
+
+            formatter.format(", " + studentName);
+            formatter.close();
             Date date = new Date();
             DateFormat dateFormat = new SimpleDateFormat(Constant.DateFormatString);
             String fullDate = dateFormat.format(date);
-            bufferedWriter.write(Constant.SubmitDateString + fullDate);
-            bufferedWriter.close();
+            System.out.println(Constant.SubmitDateString + fullDate);
 
         } catch (Exception e) {
             e.printStackTrace();
@@ -74,11 +76,17 @@ class StudentList {
 
     }
 
-    public void c() {
-
+    public void wordCount() {
+        int count = 0;
         try {
-            String[] studentNames = getNames();
-            System.out.println(studentNames.length + " names found");
+            String[] studentNames = getStudentNames();
+
+            for(String name : studentNames){
+               String studentName[] =  name.split(" ");
+               count  = count + studentName.length;
+            }
+
+            System.out.println(" word(s) found: " + count);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -88,7 +96,7 @@ class StudentList {
     public void question(String args[]) {
 
         try {
-            String[] studentNames = getNames();
+            String[] studentNames = getStudentNames();
             int length = studentNames.length;
             String student = args[1];
             System.out.println();
@@ -117,26 +125,33 @@ public class Main {
 
         System.out.println(Constant.LoadingMessage);
 
-        //		Check arguments
-        switch (args[0]) {
-            case Constant.ShowAll:
-                studentList.a();
-                break;
-            case Constant.ShowRandom:
-                studentList.r();
-                break;
-            case Constant.AddStudentName:
-                studentList.plus(args);
-                break;
-            case Constant.StudentSearch:
-                studentList.question(args);
-                break;
-            case Constant.StudentCount:
-                studentList.c();
-                break;
-            default:
-                System.out.println(Constant.WarningMessage);
-                System.out.println(Constant.GUIDE);
+        if(args.length >= 1) {
+
+
+            //		Check arguments
+            switch (args[0]) {
+                case Constant.ShowAll:
+                    studentList.showStudentsName();
+                    break;
+                case Constant.ShowRandom:
+                    studentList.showARandomStudent();
+                    break;
+                case Constant.AddStudentName:
+                    studentList.addAStudentNameInStudentList(args);
+                    break;
+                case Constant.StudentSearch:
+                    studentList.question(args);
+                    break;
+                case Constant.StudentCount:
+                    studentList.wordCount();
+                    break;
+                default:
+                    System.out.println(Constant.WarningMessage);
+                    System.out.println(Constant.GUIDE);
+            }
+        }else{
+//            System.out.println(Constant.WarningMessage);
+//            System.out.println(Constant.GUIDE);
         }
 
         System.out.println(Constant.LoadingSuccessMessage);

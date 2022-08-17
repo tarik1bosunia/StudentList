@@ -1,0 +1,12 @@
+//            BufferedWriter bufferedWriter = new BufferedWriter(
+//                    new FileWriter(Constant.StudentList, true));
+//
+//            String t = args[0].substring(1);
+//            Date date = new Date();
+//            DateFormat dateFormat = new SimpleDateFormat(Constant.DateFormatString);
+//            String fullDate = dateFormat.format(date);
+//            System.out.println(Constant.SubmitDateString + fullDate);
+//            bufferedWriter.write(", " + args[1]);
+
+           // bufferedWriter.write(", "+t+"\nList last updated on "+ fullDate);
+//            bufferedWriter.close();
